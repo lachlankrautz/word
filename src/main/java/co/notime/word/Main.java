@@ -1,6 +1,6 @@
 package co.notime.word;
 
-import java.io.File;
+import java.io.IOException;
 
 /**
  * Author: Lachlan Krautz
@@ -10,13 +10,12 @@ public class Main {
 
     public static void main (String[] args) {
         if (args.length > 0) {
-            File file = new File(args[0]);
-            if (!file.exists()) {
-                System.out.println("File not found: " + args[0]);
-                return;
+            FileTest test = new FileTest(args[0]);
+            try {
+                test.run();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            FileTest test = new FileTest(file);
-            test.run();
         }
         else {
             System.out.println("Please specify file to open");

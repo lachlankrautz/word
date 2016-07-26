@@ -1,6 +1,8 @@
 package co.notime.word;
 
-import java.io.File;
+import org.apache.poi.xwpf.usermodel.*;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 /**
  * Author: Lachlan Krautz
@@ -8,14 +10,33 @@ import java.io.File;
  */
 class FileTest {
 
-    private File file;
+    private String filePath;
 
-    FileTest(File file) {
-        this.file = file;
+    FileTest(String filePath) {
+        this.filePath = filePath;
     }
 
-    void run() {
-        System.out.println("Running: " + file.getName());
-        
+    void run() throws IOException {
+        FileInputStream fis = new FileInputStream(filePath);
+        XWPFDocument docx   = new XWPFDocument(fis);
+
+        for (XWPFParagraph p: docx.getParagraphs()) {
+            showLine(p.getText().trim());
+        }
+
+        for (XWPFTable t: docx.getTables()) {
+            for (XWPFTableRow r: t.getRows()) {
+                for (XWPFTableCell c: r.getTableCells()) {
+                    showLine(c.getText().trim());
+                }
+            }
+        }
+    }
+
+    private void showLine (String line) {
+        if (line.isEmpty()) {
+            return;
+        }
+        System.out.println(line);
     }
 }
