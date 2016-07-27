@@ -9,10 +9,18 @@ import java.io.IOException;
 public class Main {
 
     public static void main (String[] args) {
-        if (args.length > 0) {
-            FileTest test = new FileTest(args[0]);
+        if (args.length > 1) {
             try {
-                test.run();
+                String file   = args[0];
+                FileTest test = new FileTest(file);
+                for (String action: args) {
+                    if (action.equals("paragraphs")) {
+                        test.showParagraphs();
+                    }
+                    else if (action.equals("tables")) {
+                        test.showTables();
+                    }
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

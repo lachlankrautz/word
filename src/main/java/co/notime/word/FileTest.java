@@ -10,20 +10,20 @@ import java.io.IOException;
  */
 class FileTest {
 
-    private String filePath;
+    private XWPFDocument docx;
 
-    FileTest(String filePath) {
-        this.filePath = filePath;
+    FileTest(String filePath) throws IOException {
+        FileInputStream fis = new FileInputStream(filePath);
+        docx = new XWPFDocument(fis);
     }
 
-    void run() throws IOException {
-        FileInputStream fis = new FileInputStream(filePath);
-        XWPFDocument docx   = new XWPFDocument(fis);
-
+    void showParagraphs () {
         for (XWPFParagraph p: docx.getParagraphs()) {
             showLine(p.getText().trim());
         }
+    }
 
+    void showTables () {
         for (XWPFTable t: docx.getTables()) {
             for (XWPFTableRow r: t.getRows()) {
                 for (XWPFTableCell c: r.getTableCells()) {
