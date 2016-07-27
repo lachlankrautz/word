@@ -3,6 +3,7 @@ package co.notime.word;
 import org.apache.poi.xwpf.usermodel.*;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 /**
  * Author: Lachlan Krautz
@@ -18,25 +19,22 @@ class FileTest {
     }
 
     void showParagraphs () {
-        for (XWPFParagraph p: docx.getParagraphs()) {
-            showLine(p.getText().trim());
-        }
+        String text = docx.getParagraphs().stream()
+                .map(p -> p.getText().trim())
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.joining("\n"));
+
+        System.out.println(text);
     }
 
     void showTables () {
-        for (XWPFTable t: docx.getTables()) {
-            for (XWPFTableRow r: t.getRows()) {
-                for (XWPFTableCell c: r.getTableCells()) {
-                    showLine(c.getText().trim());
-                }
-            }
-        }
-    }
+        String text = docx.getTables().stream()
+                .flatMap(t -> t.getRows().stream())
+                .flatMap(r -> r.getTableCells().stream())
+                .map(c -> c.getText().trim())
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.joining("\n"));
 
-    private void showLine (String line) {
-        if (line.isEmpty()) {
-            return;
-        }
-        System.out.println(line);
+        System.out.println(text);
     }
 }
