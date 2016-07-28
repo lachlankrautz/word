@@ -27,7 +27,22 @@ class FileTest {
         System.out.println(text);
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     void showTables () {
+
+        // Iterative
+        for (XWPFTable t: docx.getTables()) {
+            for (XWPFTableRow r: t.getRows()) {
+                for (XWPFTableCell c: r.getTableCells()) {
+                    String s = c.getText().trim();
+                    if (!s.isEmpty()) {
+                        // System.out.println(s);
+                    }
+                }
+            }
+        }
+
+        // Functional
         String text = docx.getTables().stream()
                 .flatMap(t -> t.getRows().stream())
                 .flatMap(r -> r.getTableCells().stream())
